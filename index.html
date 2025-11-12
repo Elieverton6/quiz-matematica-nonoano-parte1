@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quiz de Matemática 9º ano - Prof Valdeck Francisco</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="stage">
+    <header>
+      <div class="brand-group">
+        <div class="title-wrap">
+          <h1 style="font-size: 18px;">SAEPE 2025</h1>
+          <h1>Quiz de Matemática 9º ano</h1>
+          <p>Resolva as questões e teste seus conhecimentos!</p>
+        </div>
+      </div>
+    </header>
+
+    <div id="quiz-box" class="slide-card">
+      <div class="progress">
+        <div class="bar" id="progress-bar"></div>
+      </div>
+      <div class="question-header">
+        <span class="subject">Mat. Part 1</span>
+        <p>|</p>
+        <h3 id="question-counter"></h3>
+      </div>
+      <h3 id="question-counter"></h3>
+      <h2 id="question">Pergunta aqui</h2>
+      <ul id="options" class="bullets"></ul>
+      <button id="next-btn" class="btn">Próxima</button>
+    </div>
+
+    <a class="btn-quiz-parte2" href="https://quiz-matematica-nonoano-parte2" title="parte 2" target="_blank">Ir para parte 2</a>
+
+    <div id="result-box" class="slide-card hidden">
+      <h2>🎉 Resultado</h2>
+      <p>Você acertou <span id="score"></span> de <span id="total"></span> questões.</p>
+      <button id="restart-btn" class="btn secondary">Jogar Novamente</button>
+    </div>
+
+    <footer>Professor Valdeck Francisco — Material Didático</footer>
+  </div>
+
+  <script>
+    const questions = [
+      {question:"Duas figuras são semelhantes quando:", options:["Possuem ângulos congruentes e lados proporcionais","Possuem a mesma área","Possuem o mesmo perímetro","São congruentes"], answer:0},
+      {question:"Se dois triângulos são semelhantes, então:", options:["Seus ângulos são opostos","Seus lados correspondentes são proporcionais","Seus lados são iguais","Suas áreas sempre são iguais"], answer:1},
+      {question:"No triângulo retângulo, o maior lado sempre é:", options:["Um cateto","Um ângulo reto","A hipotenusa","Nenhuma das alternativas"], answer:2},
+      {question:"O Teorema de Pitágoras afirma que:", options:["a + b = c","a² - b² = c²","a² - b = c","ab = c²"], answer:1},
+      {question:"A razão entre lados correspondentes de figuras semelhantes é chamada de:", options:["Perímetro","Hipotenusa","Diagonal","Escala"], answer:3},
+      {question:"Em um triângulo retângulo, os lados que formam o ângulo de 90° são:", options:["Alturas","Catetos","Medianas","Hipotenusas"], answer:1},
+      {question:"Um poliedro é uma figura geométrica formada por:", options:["Faces planas","Superfícies curvas","Pontos soltos","Apenas triângulos"], answer:0},
+      {question:"A soma das faces, vértices e arestas de um poliedro é relacionada pelo:", options:["Teorema de Tales","Fórmula de Euler","Teorema de Pitágoras","Lei dos Cossenos"], answer:1},
+      {question:"A fórmula de Euler é:", options:["V - A + F = 2","V + A = F","V + F = A","V - F = 2A"], answer:0},
+      {question:"A circunferência é:", options:["A figura interna do círculo","O conjunto de pontos equidistantes de um centro","A mesma coisa que um triângulo","Um poliedro"], answer:1},
+      {question:"O raio da circunferência é:", options:["A distância do centro até qualquer ponto da circunferência","Sempre igual ao diâmetro","Igual ao comprimento da circunferência","Sempre maior que o diâmetro"], answer:0},
+      {question:"O diâmetro é:", options:["Metade do raio","Igual ao raio","O dobro do raio","A distância entre dois centros"], answer:2},
+      {question:"Se a escala de um mapa é 1:1000, então 1 cm no mapa representa:", options:["10 cm na realidade","100 cm na realidade","1000 cm na realidade","1 km na realidade"], answer:2},
+      {question:"No triângulo retângulo, a projeção de um cateto sobre a hipotenusa é relacionada por:", options:["Relações métricas","Teorema de Tales","Prismas","Área"], answer:0},
+      {question:"O comprimento da circunferência é calculado por:", options:["2πr","πr²","2r","r²"], answer:0},
+      {question:"A área do círculo é calculada por:", options:["2πr","4r","πr²","2πr²"], answer:2},
+      {question:"Um cubo possui quantas faces?", options:["4","6","8","12"], answer:1},
+      {question:"Um prisma triangular possui:", options:["3 faces","4 faces","5 faces","6 faces"], answer:2},
+      {question:"Dois triângulos são semelhantes quando:", options:["Têm um ângulo congruente","Têm dois ângulos congruentes","Não têm ângulos iguais","Têm áreas iguais"], answer:1},
+      {question:"No triângulo 3-4-5, a hipotenusa é:", options:["3","4","5","6"], answer:2},
+      {question:"A soma dos ângulos internos de um triângulo é:", options:["90°","120°","180°","360°"], answer:2},
+      {question:"Um poliedro é considerado regular quando:", options:["Todas as faces são congruentes e regulares","Tem faces curvas","Tem o dobro de vértices que arestas","Possui apenas triângulos"], answer:0},
+      {question:"Se dois círculos têm o mesmo raio, então eles são:", options:["Poliedros","Congruentes","Semelhantes","Retângulos"], answer:1},
+      {question:"A relação entre circunferência e diâmetro é chamada de:", options:["Número de Euler","Número áureo","Número pi","Número imaginário"], answer:2},
+      {question:"O valor aproximado de π é:", options:["2,14","3,14","3,41","4,13"], answer:1},
+      {question:"A expressão (3x + 2x) é equivalente a:", options:["5x","6x","x²","3x²"], answer:0},
+      {question:"Resolva (x + 7 = 15):", options:["6","8","22","2"], answer:1},
+      {question:"Resolva (5x = 35):", options:["6","8","7","9"], answer:2},
+      {question:"O valor numérico de (2a + 3) para (a = 4) é:", options:["11","8","10","13"], answer:0},
+      {question:"Simplifique: (4(x + 3)):", options:["4x + 3","4x + 12","x + 12","4x + 9"], answer:1},
+      {question:"A expressão ((6x - 3x) + x) resulta em:", options:["4x","3x","x","2x"], answer:0},
+      {question:"20% de 150 é:", options:["15","20","30","35"], answer:2},
+      {question:"45% pode ser escrito como:", options:["0,45","0,54","45","4,5"], answer:0},
+      {question:"Se um produto custa R$ 60 e recebe um desconto de 10%, o preço final é:", options:["R$ 40","R$ 50","R$ 56","R$ 54"], answer:3},
+      {question:"A equação (x - 12 = 4) tem como solução:", options:["8","16","12","4"], answer:1},
+      {question:"Resolva (3(x - 2) = 12):", options:["6","4","8","2"], answer:0},
+      {question:"A expressão que representa “o dobro de um número mais 5” é:", options:["x + 2","x + 5","5x + 2","2x + 5"], answer:3},
+      {question:"A notação científica de 50.000 é:", options:["5 x 10³","50 x 10³","5 x 10⁴","5 x 10⁵"], answer:1},
+      {question:"A notação científica de 0,0008 é:", options:["8 x 10⁻³","8 x 10⁻⁴","8 x 10³","8 x 10⁴"], answer:1},
+      {question:"12% de 400 é:", options:["48","24","12","40"], answer:0},
+      {question:"Resolva: (4x - 8 = 0):", options:["1","4","8","2"], answer:3},
+      {question:"Se (x = 3), então (x² + 2x) vale:", options:["9","12","15","21"], answer:2},
+      {question:"A expressão (7x - 3x + 4) é igual a:", options:["10x + 4","4x + 4","4x - 4","4 - x"], answer:1},
+      {question:"Resolva: (9x = 81):", options:["6","7","8","9"], answer:3},
+      {question:"75% é equivalente a:", options:["0,0075","0,75","7,5","75"], answer:1},
+      {question:"Se um salário de R$ 1200 aumenta 5%, o novo valor é:", options:["R$ 1260","R$ 1220","R$ 1300","R$ 1250"], answer:0},
+      {question:"A forma simplificada de (3(x - 4) + 2x) é:", options:["5x - 4","3x - 12 + 2x","5x - 12","5x + 12"], answer:2},
+      {question:"A equação (x / 5 = 3) tem solução:", options:["5","8","10","15"], answer:3},
+      {question:"O valor de (2³) é:", options:["6","8","12","9"], answer:1},
+      {question:"A expressão ((x + 2) - (x - 3)) é equivalente a:", options:["2x - 1","5","3x + 2","5x"], answer:1}
+    ];
+
+    const questionEl = document.getElementById("question");
+    const optionsEl = document.getElementById("options");
+    const nextBtn = document.getElementById("next-btn");
+    const progressBar = document.getElementById("progress-bar");
+    const quizBox = document.getElementById("quiz-box");
+    const resultBox = document.getElementById("result-box");
+    const scoreEl = document.getElementById("score");
+    const totalEl = document.getElementById("total");
+    const restartBtn = document.getElementById("restart-btn");
+
+    let currentQuestion = 0;
+    let score = 0;
+
+    totalEl.textContent = questions.length;
+
+    const questionCounterEl = document.getElementById("question-counter");
+
+    function loadQuestion() {
+      const q = questions[currentQuestion];
+      questionEl.textContent = q.question;
+      optionsEl.innerHTML = "";
+      q.options.forEach((opt, i) => {
+        const li = document.createElement("li");
+        li.textContent = opt;
+        li.classList.add("option");
+        li.addEventListener("click", () => selectOption(i));
+        optionsEl.appendChild(li);
+      });
+      nextBtn.style.display = "none";
+      updateProgress();
+
+      // Atualiza número da questão
+      questionCounterEl.textContent = `Questão ${currentQuestion + 1} de ${questions.length}`;
+    }
+
+    function selectOption(index) {
+      const q = questions[currentQuestion];
+      const allOptions = document.querySelectorAll(".option");
+      allOptions.forEach((opt, i) => {
+        if (i === q.answer) opt.classList.add("correct");
+        if (i === index && i !== q.answer) opt.classList.add("wrong");
+        opt.style.pointerEvents = "none";
+      });
+      if (index === q.answer) score++;
+      nextBtn.style.display = "block";
+    }
+
+    nextBtn.addEventListener("click", () => {
+      currentQuestion++;
+      if (currentQuestion < questions.length) {
+        loadQuestion();
+      } else {
+        showResult();
+      }
+    });
+
+    function updateProgress() {
+      const pct = ((currentQuestion) / questions.length) * 100;
+      progressBar.style.width = pct + "%";
+    }
+
+    function showResult() {
+      quizBox.classList.add("hidden");
+      resultBox.classList.remove("hidden");
+      scoreEl.textContent = score;
+      progressBar.style.width = "100%";
+    }
+
+    restartBtn.addEventListener("click", () => {
+      score = 0;
+      currentQuestion = 0;
+      resultBox.classList.add("hidden");
+      quizBox.classList.remove("hidden");
+      loadQuestion();
+    });
+
+    loadQuestion();
+  </script>
+</body>
+</html>
